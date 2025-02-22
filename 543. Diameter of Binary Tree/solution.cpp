@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <functional>
 #include <iostream>
 
 struct TreeNode {
@@ -14,10 +15,27 @@ struct TreeNode {
 class Solution {
 public:
   int diameterOfBinaryTree(TreeNode *root) {
+
+    int diameter = 0;
+    std::function<int(TreeNode*)> DFS; 
+    DFS = [&](TreeNode* root) -> int{
+
+      if (!root) {
+        return 0;
+      }
+
+      int left = DFS(root->left);
+      int right = DFS(root->right);
+
+      diameter = std::max(diameter, left+right);
+      return std::max(left,right) + 1;
+    };
+
+    DFS(root);
+    return diameter;
   }
 };
 
-int main() {
-
+int main(){
   return 0;
 }
