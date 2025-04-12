@@ -55,7 +55,7 @@ public:
 int main() {
 
   auto dict = new WordDictionary();
-  dict->addWord("hello");
+  dict->addWord("at");
   cout << dict->search("h");
 
   return 0;
