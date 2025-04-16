@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <functional>
-#include <iostream>
+
+using namespace std;
 
 struct TreeNode {
   int val;
@@ -17,25 +18,20 @@ public:
   int diameterOfBinaryTree(TreeNode *root) {
 
     int diameter = 0;
-    std::function<int(TreeNode*)> DFS; 
-    DFS = [&](TreeNode* root) -> int{
-
-      if (!root) {
+    std::function<int(TreeNode(*))> DFS;
+    DFS = [&](TreeNode *node) -> int {
+      if (node == nullptr) {
         return 0;
       }
 
-      int left = DFS(root->left);
-      int right = DFS(root->right);
+      int left = DFS(node->left) + 1;
+      int right = DFS(node->right) + 1;
 
-      diameter = std::max(diameter, left+right);
-      return std::max(left,right) + 1;
+      diameter = max(diameter, left + right);
+      return max(left, right);
     };
 
     DFS(root);
     return diameter;
   }
 };
-
-int main(){
-  return 0;
-}
