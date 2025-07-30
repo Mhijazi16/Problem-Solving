@@ -1,36 +1,34 @@
-#include <algorithm>
-#include <cctype>
-#include <ios>
+#include <functional>
 #include <string>
 
 using namespace std;
 
 class Solution {
 public:
-  bool isPalindrome(string s) {
+    bool validPalindrome(string s) {
 
-    int left = 0, right = s.length();
-    while (left < right) {
+      bool tolerate = true;
 
-      s[left] = tolower(s[left]);
-      s[right] = tolower(s[right]);
+      function<bool(string, int, int)> isPlaindrome;
+      isPlaindrome = [&](string str, int left, int right) -> bool{ 
+        while (left <= right) {
+          if (str[left] == str[right]) {
+            left++;
+            right--;
+            continue;
+          }
 
-      while (left < right && s[left] < 'a' || s[left] > 'z') {
-        left++;
-      }
+          if (!tolerate) {
+            return false;
+          }
 
-      while (left < right && s[right] < 'a' || s[right] > 'z') {
-        right--;
-      }
+          tolerate = false;
+          return isPlaindrome(str, left, right-1) || isPlaindrome(str, left+1, right);
+        }
 
-      if (s[left] != s[right]) {
-        return false;
-      }
+        return true;
+      };
 
-      left++;
-      right--;
+      return isPlaindrome(s, 0, s.length()-1);
     }
-
-    return true;
-  }
 };
