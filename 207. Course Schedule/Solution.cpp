@@ -1,54 +1,44 @@
-#include <functional>
-#include <map>
 #include <set>
-#include <unordered_map>
+#include <unordered_set>
 #include <vector>
+#include <unordered_map>
+#include <functional>
 
 using namespace std;
 
 class Solution {
 public:
-  bool canFinish(int numCourses, vector<vector<int>> &prerequisites) {
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
 
-    if (numCourses == 1 || prerequisites.empty()) {
-      return true;
-    }
+      vector<vector<int>> graph(numCourses); 
+      vector<int> state(numCourses);
 
-    map<int, vector<int>> graph;
-    for (auto &tuple : prerequisites) {
-      if (tuple[0] == tuple[1]) {
-        return false;
+      for (auto& requisit : prerequisites) {
+        graph[requisit[1]].push_back(requisit[0]);
       }
-      graph[tuple[0]].push_back(tuple[1]);
-    }
 
-    unordered_map<int, bool> seen;
+      function<bool(int)> DFS;
+      DFS = [&](int course) -> bool{
+        if (state[course] == 1) return false;
+        if (state[course] == 2) return true;
 
-    function<bool(int)> DFS;
-    DFS = [&](int course) -> bool {
-      if (graph[course].empty()) {
+
+        state[course] = 1;
+        for (auto& requisit : graph[course]) {
+          if (DFS(requisit) == false) return false;
+        }
+
+        state[course] =  2;
         return true;
-      }
+      };
 
-      if (seen[course]) {
-        return false;
-      }
-      seen[course] = true;
 
-      for (auto &preq : graph[course]) {
-        if (!DFS(preq))
+      for (int i = 0; i < numCourses; i++) {
+        if (DFS(i) == false) {
           return false;
+        }
       }
 
       return true;
-    };
-
-    for (auto &preq : prerequisites) {
-      if (!DFS(preq[0]))
-        return false;
-      ;
     }
-
-    return true;
-  }
 };
