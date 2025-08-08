@@ -8,20 +8,17 @@ struct ListNode {
 class Solution {
 public:
   bool hasCycle(ListNode *head) {
+    ListNode* fast = head->next;
+    ListNode* slow = head;
 
-    if (head == nullptr)
-      return false;
-
-    auto slow = head;
-    auto fast = head->next;
-
-    while (fast != nullptr && fast->next != nullptr) {
-      if (fast == slow) {
+    while (fast != nullptr || fast->next != nullptr) {
+      if (slow == fast)
         return true;
-      }
+
       slow = slow->next;
       fast = fast->next->next;
     }
+
     return false;
   }
 };
