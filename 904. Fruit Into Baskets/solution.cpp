@@ -7,11 +7,9 @@ using namespace std;
 
 class Solution {
 public:
-
-
-  int totalFruit(vector<int>& fruits) {
+  int totalFruit(vector<int> &fruits) {
     unordered_map<int, int> map;
-    int left = 0, right = 0, len = fruits.size(); 
+    int left = 0, right = 0, len = fruits.size();
     int length = 0;
 
     for (int right = 0; right < len; right++) {
@@ -24,9 +22,9 @@ public:
         left++;
       }
 
-      length = max(length, right - left  + 1);
+      length = max(length, right - left + 1);
     }
 
-    return length; 
+    return length;
   }
 };
